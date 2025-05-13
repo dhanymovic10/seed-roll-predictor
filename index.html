@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seed Roll Predictor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 2em; max-width: 600px; margin: auto; }
+    input, button { margin: 0.5em 0; padding: 0.5em; width: 100%; }
+    .result { margin-top: 1em; font-weight: bold; color: blue; }
+  </style>
+</head>
+<body>
+  <h1>Seed Roll Predictor</h1>
+  <input id="serverSeed" placeholder="Server Seed" />
+  <input id="serverSeedHash" placeholder="Server Seed Hash" />
+  <input id="clientSeed" placeholder="Client Seed" />
+  <input id="nonce" placeholder="Nonce" />
+  <button onclick="calculateRoll()">Predict Roll</button>
+  <button onclick="verifyHash()">Verify Hash</button>
+  <button onclick="predictHash()">Predict Next Hash</button>
+  <div class="result" id="output"></div>
+  <script>
+    function calculateRoll() {
+      const serverSeed = document.getElementById('serverSeed').value;
+      const clientSeed = document.getElementById('clientSeed').value;
+      const nonce = document.getElementById('nonce').value;
+      const string1 = `${nonce}:${serverSeed}:${nonce}`;
+      const string2 = `${nonce}:${clientSeed}:${nonce}`;
+      const hmac = CryptoJS.HmacSHA512(string1, string2).toString();
+      const first8 = hmac.substring(0, 8);
+      const decimal = parseInt(first8, 16);
+      const roll = Math.round(decimal / 429496.7295);
+      document.getElementById('output').innerText = "Predicted Roll: " + (roll > 10000 ? 10000 : roll);
+    }
+    function verifyHash() {
+      const serverSeed = document.getElementById('serverSeed').value;
+      const hash = CryptoJS.SHA256(serverSeed).toString();
+      const expected = document.getElementById('serverSeedHash').value;
+      document.getElementById('output').innerText = (hash === expected) ? "Hash match confirmed!" : "Hash mismatch!";
+    }
+    function predictHash() {
+      const serverSeed = document.getElementById('serverSeed').value;
+      const hash = CryptoJS.SHA256(serverSeed).toString();
+      document.getElementById('output').innerText = "SHA256 of Server Seed: " + hash;
+    }
+  </script>
+</body>
+</html>
