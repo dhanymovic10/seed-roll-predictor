@@ -1,0 +1,14 @@
+
+{
+  "name": "seed-roll-predictor",
+  "version": "1.0.0",
+  "description": "Web app for predicting seed roll results",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Web already built'",
+    "start": "npx serve dist"
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}

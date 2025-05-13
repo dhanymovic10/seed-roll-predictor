@@ -1,0 +1,7 @@
+
+{
+  "appId": "com.example.seedroll",
+  "appName": "SeedRollPredictor",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
